@@ -36,7 +36,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
 // Basic route for testing
 app.get('/', (req, res) => {
-  res.send('Call Recording Server is running.');
+  res.status(200).json('Call Recording Server is running.');
 });
 
 // Start the server
