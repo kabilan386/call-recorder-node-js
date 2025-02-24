@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Route to handle file uploads
 app.post('/upload', upload.single('file'), (req, res) => {
   if (!req.file) {
@@ -41,6 +41,21 @@ app.get('/', (req, res) => {
 
 app.get('/check', (req, res) => {
   res.status(200).json('Call Recording Server is running.');
+});
+
+app.get('/sample', (req, res) => {
+  const sampleFilePath = path.join(__dirname, 'uploads', 'text.txt'); 
+
+  if (fs.existsSync(sampleFilePath)) {
+    res.download(sampleFilePath, 'text.txt', (err) => {
+      if (err) {
+        console.error('Error sending sample file:', err);
+        res.status(500).send('Error sending sample file.');
+      }
+    });
+  } else {
+    res.status(404).send('Sample file not found.');
+  }
 });
 
 // Start the server
